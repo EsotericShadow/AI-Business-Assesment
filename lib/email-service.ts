@@ -21,7 +21,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
   try {
     // Try Resend first if API key is available
     if (resend) {
-      const fromEmail = options.from || process.env.FROM_EMAIL || 'noreply@evergreenwebsolutions.ca'
+      const fromEmail = options.from || process.env.FROM_EMAIL || 'Evergreen Web Solutions <noreply@evergreenwebsolutions.ca>'
       
       const result = await resend.emails.send({
         from: fromEmail,
@@ -55,7 +55,7 @@ async function sendEmailWithSendGrid(options: EmailOptions): Promise<boolean> {
       return true // Return true for demo purposes
     }
 
-    const fromEmail = options.from || process.env.FROM_EMAIL || 'gabriel@evergreenwebsolutions.ca'
+    const fromEmail = options.from || process.env.FROM_EMAIL || 'Gabriel Lacroix <gabriel@evergreenwebsolutions.ca>'
     
     const msg = {
       to: options.to,
