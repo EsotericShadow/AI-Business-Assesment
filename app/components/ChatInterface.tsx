@@ -570,86 +570,91 @@ ${ratedProcesses.slice(0, 3).map((p, i) => `${i + 1}. **${p.name}** - ${p.timeSa
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
+    <div className="h-screen max-h-screen flex flex-col overflow-hidden bg-gray-50">
       {/* Header with Progress */}
       <ProgressBar currentPhase={phase} onExit={onExit} />
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-4">
-        {messages.map((message) => (
-          <ChatMessage
-            key={message.id}
-            message={message}
-            onProcessSelect={handleProcessSelect}
-            onRatingSelect={handleRatingSelect}
-            onGetReport={handleGetReport}
-            onBookCall={handleBookCall}
-            onStartImplementation={handleStartImplementation}
-          />
-        ))}
-        
+      {/* Messages Container - Mobile optimized */}
+      <div className="flex-1 overflow-y-auto momentum-scroll px-3 sm:px-4 md:px-6 py-3 sm:py-4 contain-layout">
+        <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4">
+          {messages.map((message) => (
+            <ChatMessage
+              key={message.id}
+              message={message}
+              onProcessSelect={handleProcessSelect}
+              onRatingSelect={handleRatingSelect}
+              onGetReport={handleGetReport}
+              onBookCall={handleBookCall}
+              onStartImplementation={handleStartImplementation}
+            />
+          ))}
+          
           {isLoading && <LoadingMessage status={loadingStatus} />}
           
-          {/* Discovery Progress Indicator */}
+          {/* Discovery Progress Indicator - Mobile optimized */}
           {phase === 'discovery' && questionCount > 0 && (
-            <div className="bg-blue-50 rounded-lg p-4 mb-4 mx-4">
+            <div className="glass rounded-xl p-3 sm:p-4 my-3 border border-blue-200/50">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-blue-900">Discovery Progress</span>
-                <span className="text-sm text-blue-700">{questionCount}/6 questions</span>
+                <span className="text-xs sm:text-sm font-medium text-blue-900">Discovery Progress</span>
+                <span className="text-xs sm:text-sm text-blue-700">{questionCount}/6</span>
               </div>
-              <div className="w-full bg-blue-200 rounded-full h-2">
+              <div className="w-full bg-blue-200 rounded-full h-1.5 sm:h-2">
                 <div 
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-500"
+                  className="bg-blue-600 h-1.5 sm:h-2 rounded-full transition-all duration-500 ease-spring"
                   style={{ width: `${discoveryProgress}%` }}
                 ></div>
               </div>
-              <p className="text-xs text-blue-600 mt-2">
-                {discoveredOpportunities.length > 0 && `Found ${discoveredOpportunities.length} opportunities so far`}
+              <p className="text-[10px] sm:text-xs text-blue-600 mt-2">
+                {discoveredOpportunities.length > 0 && `Found ${discoveredOpportunities.length} opportunities`}
                 {aiStrategy.focusAreas.length > 0 && (
-                  <span className="ml-2">
-                    • Focusing on: {aiStrategy.focusAreas.slice(0, 2).join(', ')}
+                  <span className="ml-1 sm:ml-2 hidden xs:inline">
+                    • {aiStrategy.focusAreas.slice(0, 2).join(', ')}
                   </span>
                 )}
               </p>
             </div>
           )}
           
-          {/* Continue Button for Process Selection */}
-        {phase === 'process-selection' && selectedCount > 0 && (
-          <div className="flex justify-center mb-4">
-            <button
-              onClick={handleContinueToRating}
-              className="bg-primary-600 text-white px-6 py-3 rounded-full font-medium hover:bg-primary-700 transition-colors"
-            >
-              Continue with {selectedCount} selected →
-            </button>
-          </div>
-        )}
-        
-        <div ref={messagesEndRef} />
+          {/* Continue Button for Process Selection - Mobile optimized */}
+          {phase === 'process-selection' && selectedCount > 0 && (
+            <div className="flex justify-center my-3 sm:my-4 sticky bottom-4 z-10">
+              <button
+                onClick={handleContinueToRating}
+                className="glass-strong text-primary-700 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full font-medium hover:bg-primary-50 transition-all duration-200 shadow-lg hover:shadow-xl min-h-touch touch-ripple"
+              >
+                Continue with {selectedCount} selected →
+              </button>
+            </div>
+          )}
+          
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
-      {/* Input */}
+      {/* Input - Mobile optimized with safe area */}
       {phase === 'discovery' && (
-        <div className="bg-white border-t border-gray-200 px-4 py-3">
-          <form onSubmit={handleSubmit} className="flex space-x-2">
+        <div className="glass border-t border-gray-200/50 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 safe-bottom">
+          <form onSubmit={handleSubmit} className="flex space-x-2 max-w-4xl mx-auto">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Tell me about your business..."
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
               disabled={isLoading}
+              autoComplete="off"
+              autoCapitalize="sentences"
             />
             <button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="bg-primary-600 text-white p-3 rounded-full hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="bg-primary-600 text-white p-2.5 sm:p-3 rounded-full hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 min-w-touch min-h-touch flex items-center justify-center touch-ripple"
+              aria-label="Send message"
             >
               {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
               ) : (
-                <Send className="w-5 h-5" />
+                <Send className="w-4 h-4 sm:w-5 sm:h-5" />
               )}
             </button>
           </form>
