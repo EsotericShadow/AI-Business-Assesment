@@ -37,40 +37,43 @@ export default function ChatMessage({
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
 
-  // Action Buttons Component  
+  // Action Buttons Component - Mobile optimized
   const renderActionButtons = () => {
     return (
-      <div className="space-y-3">
+      <div className="space-y-2.5 sm:space-y-3">
         <button 
           onClick={onGetReport}
-          className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center space-x-3"
+          className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-semibold text-base sm:text-lg hover:from-green-600 hover:to-green-700 active:from-green-700 active:to-green-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center space-x-2 sm:space-x-3 min-h-touch touch-ripple"
+          aria-label="Get detailed implementation report"
         >
-          <span className="text-2xl">📧</span>
-          <div className="text-left">
-            <div className="font-bold">Get Detailed Report</div>
-            <div className="text-sm opacity-90">Full implementation plan emailed to you</div>
+          <span className="text-xl sm:text-2xl flex-shrink-0">📧</span>
+          <div className="text-left flex-1 min-w-0">
+            <div className="font-bold text-sm sm:text-base truncate">Get Detailed Report</div>
+            <div className="text-xs sm:text-sm opacity-90 hidden xs:block truncate">Full implementation plan emailed to you</div>
           </div>
         </button>
         
         <button 
           onClick={onBookCall}
-          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center space-x-3"
+          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-semibold text-base sm:text-lg hover:from-blue-600 hover:to-blue-700 active:from-blue-700 active:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center space-x-2 sm:space-x-3 min-h-touch touch-ripple"
+          aria-label="Book strategy consultation call"
         >
-          <span className="text-2xl">💬</span>
-          <div className="text-left">
-            <div className="font-bold">Book Strategy Call</div>
-            <div className="text-sm opacity-90">30-min consultation with our AI experts</div>
+          <span className="text-xl sm:text-2xl flex-shrink-0">💬</span>
+          <div className="text-left flex-1 min-w-0">
+            <div className="font-bold text-sm sm:text-base truncate">Book Strategy Call</div>
+            <div className="text-xs sm:text-sm opacity-90 hidden xs:block truncate">30-min consultation with our AI experts</div>
           </div>
         </button>
         
         <button 
           onClick={onStartImplementation}
-          className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center space-x-3"
+          className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-semibold text-base sm:text-lg hover:from-purple-600 hover:to-purple-700 active:from-purple-700 active:to-purple-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center space-x-2 sm:space-x-3 min-h-touch touch-ripple"
+          aria-label="Start AI implementation project"
         >
-          <span className="text-2xl">🚀</span>
-          <div className="text-left">
-            <div className="font-bold">Start Implementation</div>
-            <div className="text-sm opacity-90">We'll help you set up your first AI solution</div>
+          <span className="text-xl sm:text-2xl flex-shrink-0">🚀</span>
+          <div className="text-left flex-1 min-w-0">
+            <div className="font-bold text-sm sm:text-base truncate">Start Implementation</div>
+            <div className="text-xs sm:text-sm opacity-90 hidden xs:block truncate">We'll help you set up your first AI solution</div>
           </div>
         </button>
       </div>
@@ -228,39 +231,47 @@ export default function ChatMessage({
   }
 
   return (
-    <div className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} mb-4`}>
-      <div className={`max-w-[85%] ${message.role === 'user' ? 'order-2' : 'order-1'}`}>
+    <div className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} mb-3 sm:mb-4`}>
+      <div className={`w-full sm:max-w-[85%] md:max-w-[75%] lg:max-w-[65%] ${message.role === 'user' ? 'order-2' : 'order-1'}`}>
         <div
-          className={`rounded-2xl px-4 py-3 ${
+          className={`rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 ${
             message.role === 'user'
               ? 'bg-primary-600 text-white'
-              : 'bg-white text-gray-900 shadow-sm border'
+              : message.type === 'text'
+              ? 'glass text-gray-900 shadow-md border border-gray-200/50'
+              : 'bg-transparent'
           }`}
         >
-          {message.role === 'assistant' && (
+          {message.role === 'assistant' && message.type === 'text' && (
             <div className="flex items-start space-x-2">
-              <div className="w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                <Bot className="w-4 h-4 text-white" />
+              <div className="w-5 h-5 sm:w-6 sm:h-6 bg-primary-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <Bot className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 {renderContent()}
-                <p className="text-xs opacity-70 mt-2">
+                <p className="text-[10px] sm:text-xs opacity-70 mt-1.5 sm:mt-2">
                   {formatTime(message.timestamp)}
                 </p>
               </div>
             </div>
           )}
           
+          {message.role === 'assistant' && message.type !== 'text' && (
+            <div className="w-full">
+              {renderContent()}
+            </div>
+          )}
+          
           {message.role === 'user' && (
             <div className="flex items-start space-x-2">
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 {renderContent()}
-                <p className="text-xs opacity-70 mt-2">
+                <p className="text-[10px] sm:text-xs opacity-70 mt-1.5 sm:mt-2">
                   {formatTime(message.timestamp)}
                 </p>
               </div>
-              <div className="w-6 h-6 bg-white bg-opacity-20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                <User className="w-4 h-4 text-white" />
+              <div className="w-5 h-5 sm:w-6 sm:h-6 bg-white bg-opacity-20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <User className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
               </div>
             </div>
           )}
