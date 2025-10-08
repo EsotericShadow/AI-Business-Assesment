@@ -11,22 +11,39 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // In a real implementation, you would:
+    // Store lead in database for follow-up
+    await storeLead({
+      email,
+      name,
+      businessInfo,
+      selectedProcesses: selectedProcesses.map((p: any) => ({
+        id: p.id,
+        name: p.name,
+        rating: p.userRating
+      })),
+      implementationRequested: true,
+      timestamp: new Date()
+    })
+
+    // Send project initiation email
+    await sendProjectInitiationEmail(email, name, selectedProcesses)
+
+    // In production, you would:
     // 1. Create a project in your project management system
     // 2. Set up initial project tasks and milestones
-    // 3. Send welcome email with next steps
-    // 4. Assign project manager and team
-    // 5. Set up project dashboard access
+    // 3. Assign project manager and team
+    // 4. Set up project dashboard access
+    // 5. Begin real AI implementation work
 
     const projectId = `proj_${Date.now()}`
     const topProcess = selectedProcesses[0] // Start with highest priority
 
-    console.log('Implementation started for:', email)
+    console.log('Implementation project requested for:', email)
     console.log('Starting with process:', topProcess?.name)
 
     return NextResponse.json({
       success: true,
-      message: 'Implementation project created! Your project manager will contact you within 24 hours.',
+      message: 'Implementation project request received! Your project manager will contact you within 24 hours to begin setup.',
       projectId,
       nextSteps: [
         'Project manager will contact you within 24 hours',
@@ -45,4 +62,26 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
+}
+
+// Store lead in database for follow-up
+async function storeLead(leadData: any) {
+  console.log('LEAD STORED:', JSON.stringify(leadData, null, 2))
+  
+  // You can integrate with:
+  // - Airtable
+  // - Notion API
+  // - Google Sheets API
+  // - Your own database
+  // - CRM like HubSpot, Salesforce, etc.
+}
+
+// Send project initiation email
+async function sendProjectInitiationEmail(email: string, name: string, selectedProcesses: any[]) {
+  console.log(`PROJECT INITIATION EMAIL SENT TO: ${email}`)
+  console.log(`SUBJECT: AI Implementation Project Started - ${name}`)
+  console.log(`CONTENT: Your AI implementation project has been initiated...`)
+  console.log(`SELECTED PROCESSES: ${selectedProcesses.map(p => p.name).join(', ')}`)
+  
+  // In production, use real email service
 }

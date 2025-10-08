@@ -449,7 +449,7 @@ ${ratedProcesses.slice(0, 3).map((p, i) => `${i + 1}. **${p.name}** - ${p.timeSa
         const successMessage: Message = {
           id: Date.now().toString(),
           role: 'assistant',
-          content: `✅ **Report Generated Successfully!**\n\nYour detailed implementation plan has been sent to **${userEmail}**. The report includes:\n\n• Complete implementation roadmap\n• Cost breakdown and ROI projections\n• Step-by-step setup guides\n• Recommended tools and vendors\n• Timeline and milestones\n\nCheck your email (including spam folder) for the full report.`,
+          content: `✅ **Report Generated Successfully!**\n\nYour detailed implementation plan has been sent to **${userEmail}**. The report includes:\n\n• Complete implementation roadmap\n• Cost breakdown and ROI projections\n• Step-by-step setup guides\n• Recommended tools and vendors\n• Timeline and milestones\n\nCheck your email (including spam folder) for the full report. We'll also follow up within 24 hours to discuss next steps.`,
           timestamp: new Date(),
           type: 'text'
         }
@@ -497,7 +497,7 @@ ${ratedProcesses.slice(0, 3).map((p, i) => `${i + 1}. **${p.name}** - ${p.timeSa
         const successMessage: Message = {
           id: Date.now().toString(),
           role: 'assistant',
-          content: `✅ **Strategy Call Booked!**\n\nYour 30-minute consultation has been scheduled. Here's what happens next:\n\n• **Confirmation email** sent to ${userEmail}\n• **Calendar invite** with meeting details\n• **Pre-call questionnaire** to prepare for our discussion\n• **Meeting link** for your scheduled time\n\n**What to expect:**\n• Review your AI opportunities\n• Discuss implementation priorities\n• Create a customized roadmap\n• Answer all your questions\n\nWe'll contact you within 24 hours to confirm your preferred time slot.`,
+          content: `✅ **Strategy Call Requested!**\n\nYour consultation request has been received. Here's what happens next:\n\n• **Confirmation email** sent to ${userEmail}\n• **Our team will contact you within 24 hours** to schedule your session\n• **30-minute strategy session** with our AI specialists\n• **Customized roadmap** based on your specific needs\n\n**What to expect in your consultation:**\n• Review your AI opportunities\n• Discuss implementation priorities\n• Create a customized roadmap\n• Answer all your questions\n• Get pricing and timeline estimates\n\nWe're excited to help transform your business with AI!`,
           timestamp: new Date(),
           type: 'text'
         }
@@ -545,7 +545,7 @@ ${ratedProcesses.slice(0, 3).map((p, i) => `${i + 1}. **${p.name}** - ${p.timeSa
         const successMessage: Message = {
           id: Date.now().toString(),
           role: 'assistant',
-          content: `🚀 **Implementation Project Created!**\n\nYour AI transformation journey has officially begun! Here's what happens next:\n\n**Immediate Next Steps:**\n• **Project Manager assigned** - You'll be contacted within 24 hours\n• **Project Dashboard access** - You'll receive login credentials\n• **Discovery call scheduled** - Initial planning session next week\n• **Implementation timeline** - Detailed roadmap will be finalized\n\n**Starting with:** ${result.startingProcess}\n**Estimated start date:** ${new Date(result.estimatedStartDate).toLocaleDateString()}\n\n**What to expect:**\n• Weekly progress updates\n• Dedicated support team\n• Regular check-ins and adjustments\n• Full implementation support\n\nWelcome to the future of your business! 🎉`,
+          content: `🚀 **Implementation Project Started!**\n\nYour AI transformation journey has officially begun! Here's what happens next:\n\n**Immediate Next Steps:**\n• **Project Manager assigned** - You'll be contacted within 24 hours\n• **Project Dashboard access** - You'll receive login credentials\n• **Discovery call scheduled** - Initial planning session next week\n• **Implementation timeline** - Detailed roadmap will be finalized\n\n**Starting with:** ${result.startingProcess}\n**Estimated start date:** ${new Date(result.estimatedStartDate).toLocaleDateString()}\n\n**What to expect:**\n• Weekly progress updates\n• Dedicated support team\n• Regular check-ins and adjustments\n• Full implementation support\n• Transparent pricing and billing\n\nWelcome to the future of your business! 🎉`,
           timestamp: new Date(),
           type: 'text'
         }

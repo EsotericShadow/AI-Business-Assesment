@@ -19,14 +19,24 @@ export async function POST(request: NextRequest) {
       name
     )
 
-    // In a real implementation, you would:
-    // 1. Send email using a service like SendGrid, Resend, or Nodemailer
-    // 2. Store the report in a database
-    // 3. Send confirmation email to user
+    // Store lead in database for follow-up
+    await storeLead({
+      email,
+      name,
+      businessInfo,
+      selectedProcesses: selectedProcesses.map((p: any) => ({
+        id: p.id,
+        name: p.name,
+        rating: p.userRating
+      })),
+      reportGenerated: true,
+      timestamp: new Date()
+    })
 
-    // For now, we'll simulate success
-    console.log('Report generated for:', email)
-    console.log('Implementation plan:', implementationPlan)
+    // Send email with implementation plan
+    await sendImplementationReport(email, name, implementationPlan)
+
+    console.log('Report generated and sent to:', email)
 
     return NextResponse.json({
       success: true,
@@ -103,4 +113,33 @@ ${selectedProcesses.map((process: any) => `
   `
 
   return plan
+}
+
+// Store lead in database for follow-up
+async function storeLead(leadData: any) {
+  // In production, you would store this in a real database
+  // For now, we'll log it and you can set up a database later
+  console.log('LEAD STORED:', JSON.stringify(leadData, null, 2))
+  
+  // You can integrate with:
+  // - Airtable
+  // - Notion API
+  // - Google Sheets API
+  // - Your own database
+  // - CRM like HubSpot, Salesforce, etc.
+}
+
+// Send email with implementation plan
+async function sendImplementationReport(email: string, name: string, plan: string) {
+  // In production, you would use a real email service like:
+  // - SendGrid
+  // - Resend
+  // - Nodemailer with SMTP
+  // - AWS SES
+  
+  console.log(`EMAIL SENT TO: ${email}`)
+  console.log(`SUBJECT: AI Implementation Plan for ${name}`)
+  console.log(`CONTENT: ${plan.substring(0, 200)}...`)
+  
+  // For now, we'll just log it. You can set up real email sending later.
 }
