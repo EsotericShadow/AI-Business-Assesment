@@ -424,6 +424,151 @@ ${ratedProcesses.slice(0, 3).map((p, i) => `${i + 1}. **${p.name}** - ${p.timeSa
 
   const selectedCount = selectedProcesses.filter(p => p.isSelected).length
 
+  // CTA Button Handlers
+  const handleGetReport = async () => {
+    try {
+      setIsLoading(true)
+      setLoadingStatus('Generating your detailed implementation plan...')
+
+      const response = await fetch('/api/send-report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: userEmail,
+          name: userName,
+          selectedProcesses: selectedProcesses.filter(p => p.isSelected && p.userRating),
+          businessInfo
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        const successMessage: Message = {
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: `✅ **Report Generated Successfully!**\n\nYour detailed implementation plan has been sent to **${userEmail}**. The report includes:\n\n• Complete implementation roadmap\n• Cost breakdown and ROI projections\n• Step-by-step setup guides\n• Recommended tools and vendors\n• Timeline and milestones\n\nCheck your email (including spam folder) for the full report.`,
+          timestamp: new Date(),
+          type: 'text'
+        }
+        setMessages(prev => [...prev, successMessage])
+      } else {
+        throw new Error(result.error || 'Failed to generate report')
+      }
+    } catch (error) {
+      console.error('Error generating report:', error)
+      const errorMessage: Message = {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: `❌ **Error generating report**\n\nWe encountered an issue generating your implementation plan. Please try again or contact us directly at info@evergreenwebsolutions.com for assistance.`,
+        timestamp: new Date(),
+        type: 'text'
+      }
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
+      setIsLoading(false)
+      setLoadingStatus('')
+    }
+  }
+
+  const handleBookCall = async () => {
+    try {
+      setIsLoading(true)
+      setLoadingStatus('Booking your strategy call...')
+
+      const response = await fetch('/api/book-call', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: userEmail,
+          name: userName,
+          selectedProcesses: selectedProcesses.filter(p => p.isSelected && p.userRating),
+          businessInfo
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        const successMessage: Message = {
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: `✅ **Strategy Call Booked!**\n\nYour 30-minute consultation has been scheduled. Here's what happens next:\n\n• **Confirmation email** sent to ${userEmail}\n• **Calendar invite** with meeting details\n• **Pre-call questionnaire** to prepare for our discussion\n• **Meeting link** for your scheduled time\n\n**What to expect:**\n• Review your AI opportunities\n• Discuss implementation priorities\n• Create a customized roadmap\n• Answer all your questions\n\nWe'll contact you within 24 hours to confirm your preferred time slot.`,
+          timestamp: new Date(),
+          type: 'text'
+        }
+        setMessages(prev => [...prev, successMessage])
+      } else {
+        throw new Error(result.error || 'Failed to book call')
+      }
+    } catch (error) {
+      console.error('Error booking call:', error)
+      const errorMessage: Message = {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: `❌ **Error booking call**\n\nWe encountered an issue scheduling your strategy call. Please contact us directly at info@evergreenwebsolutions.com or call (250) 555-0123 to schedule your consultation.`,
+        timestamp: new Date(),
+        type: 'text'
+      }
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
+      setIsLoading(false)
+      setLoadingStatus('')
+    }
+  }
+
+  const handleStartImplementation = async () => {
+    try {
+      setIsLoading(true)
+      setLoadingStatus('Setting up your implementation project...')
+
+      const response = await fetch('/api/start-implementation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: userEmail,
+          name: userName,
+          selectedProcesses: selectedProcesses.filter(p => p.isSelected && p.userRating),
+          businessInfo
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        const successMessage: Message = {
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: `🚀 **Implementation Project Created!**\n\nYour AI transformation journey has officially begun! Here's what happens next:\n\n**Immediate Next Steps:**\n• **Project Manager assigned** - You'll be contacted within 24 hours\n• **Project Dashboard access** - You'll receive login credentials\n• **Discovery call scheduled** - Initial planning session next week\n• **Implementation timeline** - Detailed roadmap will be finalized\n\n**Starting with:** ${result.startingProcess}\n**Estimated start date:** ${new Date(result.estimatedStartDate).toLocaleDateString()}\n\n**What to expect:**\n• Weekly progress updates\n• Dedicated support team\n• Regular check-ins and adjustments\n• Full implementation support\n\nWelcome to the future of your business! 🎉`,
+          timestamp: new Date(),
+          type: 'text'
+        }
+        setMessages(prev => [...prev, successMessage])
+      } else {
+        throw new Error(result.error || 'Failed to start implementation')
+      }
+    } catch (error) {
+      console.error('Error starting implementation:', error)
+      const errorMessage: Message = {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: `❌ **Error starting implementation**\n\nWe encountered an issue setting up your implementation project. Please contact us directly at info@evergreenwebsolutions.com or call (250) 555-0123 to get started.`,
+        timestamp: new Date(),
+        type: 'text'
+      }
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
+      setIsLoading(false)
+      setLoadingStatus('')
+    }
+  }
+
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Header with Progress */}
@@ -437,6 +582,9 @@ ${ratedProcesses.slice(0, 3).map((p, i) => `${i + 1}. **${p.name}** - ${p.timeSa
             message={message}
             onProcessSelect={handleProcessSelect}
             onRatingSelect={handleRatingSelect}
+            onGetReport={handleGetReport}
+            onBookCall={handleBookCall}
+            onStartImplementation={handleStartImplementation}
           />
         ))}
         
