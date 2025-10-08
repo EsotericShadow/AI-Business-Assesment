@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { XAIResponse } from '@/lib/xai-client'
+import { storeLead } from '@/lib/database'
+import { sendImplementationReport } from '@/lib/email-service'
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,7 +22,7 @@ export async function POST(request: NextRequest) {
     )
 
     // Store lead in database for follow-up
-    await storeLead({
+    const leadId = await storeLead({
       email,
       name,
       businessInfo,
@@ -34,14 +36,16 @@ export async function POST(request: NextRequest) {
     })
 
     // Send email with implementation plan
-    await sendImplementationReport(email, name, implementationPlan)
+    const emailSent = await sendImplementationReport(email, name, implementationPlan)
 
-    console.log('Report generated and sent to:', email)
+    console.log('Report generated and sent to:', email, 'Lead ID:', leadId)
 
     return NextResponse.json({
       success: true,
       message: 'Detailed implementation plan has been sent to your email',
-      reportId: `report_${Date.now()}`
+      reportId: `report_${Date.now()}`,
+      leadId,
+      emailSent
     })
 
   } catch (error) {
@@ -113,33 +117,4 @@ ${selectedProcesses.map((process: any) => `
   `
 
   return plan
-}
-
-// Store lead in database for follow-up
-async function storeLead(leadData: any) {
-  // In production, you would store this in a real database
-  // For now, we'll log it and you can set up a database later
-  console.log('LEAD STORED:', JSON.stringify(leadData, null, 2))
-  
-  // You can integrate with:
-  // - Airtable
-  // - Notion API
-  // - Google Sheets API
-  // - Your own database
-  // - CRM like HubSpot, Salesforce, etc.
-}
-
-// Send email with implementation plan
-async function sendImplementationReport(email: string, name: string, plan: string) {
-  // In production, you would use a real email service like:
-  // - SendGrid
-  // - Resend
-  // - Nodemailer with SMTP
-  // - AWS SES
-  
-  console.log(`EMAIL SENT TO: ${email}`)
-  console.log(`SUBJECT: AI Implementation Plan for ${name}`)
-  console.log(`CONTENT: ${plan.substring(0, 200)}...`)
-  
-  // For now, we'll just log it. You can set up real email sending later.
 }

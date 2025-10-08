@@ -4,7 +4,14 @@
   "description": "AI-powered business assessment tool for Northern BC businesses",
   "private": true,
   "author": "Evergreen Web Solutions",
-  "keywords": ["ai", "business", "assessment", "nextjs", "vercel", "northern-bc"],
+  "keywords": [
+    "ai",
+    "business",
+    "assessment",
+    "nextjs",
+    "vercel",
+    "northern-bc"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/yourusername/ai-assessment-webapp.git"
@@ -16,22 +23,26 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "14.0.0",
-    "react": "^18",
-    "react-dom": "^18",
+    "@sendgrid/mail": "^8.1.6",
     "@upstash/ratelimit": "^1.0.0",
     "@upstash/redis": "^1.25.0",
-    "lucide-react": "^0.292.0",
-    "tailwindcss": "^3.3.0",
+    "@vercel/postgres": "^0.10.0",
     "autoprefixer": "^10.0.1",
-    "postcss": "^8"
+    "bcryptjs": "^3.0.2",
+    "lucide-react": "^0.292.0",
+    "next": "14.0.0",
+    "postcss": "^8",
+    "react": "^18",
+    "react-dom": "^18",
+    "resend": "^6.1.2",
+    "tailwindcss": "^3.3.0"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "14.0.0"
+    "eslint-config-next": "14.0.0",
+    "typescript": "^5"
   }
 }

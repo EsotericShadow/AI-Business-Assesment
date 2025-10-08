@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { storeLead } from '@/lib/database'
+import { sendConsultationConfirmation } from '@/lib/email-service'
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,7 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Store lead in database for follow-up
-    await storeLead({
+    const leadId = await storeLead({
       email,
       name,
       businessInfo,
@@ -26,7 +28,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Send confirmation email
-    await sendConsultationConfirmation(email, name)
+    const emailSent = await sendConsultationConfirmation(email, name)
 
     // In production, you would integrate with:
     // - Calendly API
@@ -37,7 +39,7 @@ export async function POST(request: NextRequest) {
     const bookingId = `booking_${Date.now()}`
     const meetingLink = `https://calendly.com/evergreen-websolutions/ai-strategy-call`
 
-    console.log('Consultation requested for:', email)
+    console.log('Consultation requested for:', email, 'Lead ID:', leadId)
     console.log('Selected processes:', selectedProcesses?.map((p: any) => p.name))
 
     return NextResponse.json({
@@ -45,7 +47,9 @@ export async function POST(request: NextRequest) {
       message: 'Strategy call request received! We\'ll contact you within 24 hours to schedule your consultation.',
       bookingId,
       meetingLink,
-      calendarUrl: meetingLink
+      calendarUrl: meetingLink,
+      leadId,
+      emailSent
     })
 
   } catch (error) {
@@ -57,23 +61,3 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Store lead in database for follow-up
-async function storeLead(leadData: any) {
-  console.log('LEAD STORED:', JSON.stringify(leadData, null, 2))
-  
-  // You can integrate with:
-  // - Airtable
-  // - Notion API
-  // - Google Sheets API
-  // - Your own database
-  // - CRM like HubSpot, Salesforce, etc.
-}
-
-// Send consultation confirmation email
-async function sendConsultationConfirmation(email: string, name: string) {
-  console.log(`CONSULTATION EMAIL SENT TO: ${email}`)
-  console.log(`SUBJECT: AI Strategy Consultation Request - ${name}`)
-  console.log(`CONTENT: Thank you for requesting a consultation...`)
-  
-  // In production, use real email service
-}
