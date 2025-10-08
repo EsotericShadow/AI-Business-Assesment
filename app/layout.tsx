@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 
@@ -7,6 +7,15 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'AI Business Assessment | Evergreen Web Solutions',
   description: 'Discover how AI can transform your Northern BC business. Get personalized recommendations and implementation roadmap.',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: 'cover',
+  themeColor: '#2563eb',
 }
 
 export default function RootLayout({
