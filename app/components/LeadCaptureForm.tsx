@@ -45,19 +45,67 @@ export default function LeadCaptureForm({ onComplete }: LeadCaptureFormProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-3 sm:p-4 safe-top safe-bottom">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-3 sm:p-4 safe-top safe-bottom overflow-y-auto">
       <div className="w-full max-w-md">
         {/* Logo/Header - Mobile optimized */}
-        <div className="text-center mb-6 sm:mb-8">
+        <div className="text-center mb-4 sm:mb-6">
           <div className="w-14 h-14 sm:w-16 sm:h-16 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
             <span className="text-xl sm:text-2xl">🤖</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1.5 sm:mb-2 px-4">
             AI Business Assessment
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 px-4">
+          <p className="text-sm sm:text-base text-gray-600 px-4 mb-4 sm:mb-6">
             Discover AI opportunities for your Northern BC business
           </p>
+        </div>
+
+        {/* Value Proposition - New Section */}
+        <div className="glass-strong rounded-2xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center">
+            <span className="text-lg sm:text-xl mr-2">✨</span>
+            What you'll get in 5 minutes:
+          </h2>
+          <div className="space-y-2.5 sm:space-y-3">
+            <div className="flex items-start space-x-2.5 sm:space-x-3">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-xs sm:text-sm">✓</span>
+              </div>
+              <p className="text-xs sm:text-sm text-gray-700 flex-1">
+                <strong className="text-gray-900">Personalized AI roadmap</strong> tailored to your specific business
+              </p>
+            </div>
+            <div className="flex items-start space-x-2.5 sm:space-x-3">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-xs sm:text-sm">✓</span>
+              </div>
+              <p className="text-xs sm:text-sm text-gray-700 flex-1">
+                <strong className="text-gray-900">Time & cost savings</strong> with specific ROI estimates
+              </p>
+            </div>
+            <div className="flex items-start space-x-2.5 sm:space-x-3">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-xs sm:text-sm">✓</span>
+              </div>
+              <p className="text-xs sm:text-sm text-gray-700 flex-1">
+                <strong className="text-gray-900">Implementation plan</strong> emailed directly to you
+              </p>
+            </div>
+            <div className="flex items-start space-x-2.5 sm:space-x-3">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-xs sm:text-sm">✓</span>
+              </div>
+              <p className="text-xs sm:text-sm text-gray-700 flex-1">
+                <strong className="text-gray-900">Priority recommendations</strong> ranked by impact
+              </p>
+            </div>
+          </div>
+          
+          <div className="mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-gray-200">
+            <p className="text-xs sm:text-sm text-gray-600 text-center">
+              <span className="font-semibold text-primary-600">No commitment required.</span> Just honest insights about where AI can help your business.
+            </p>
+          </div>
         </div>
 
         {/* Form - Mobile optimized */}
