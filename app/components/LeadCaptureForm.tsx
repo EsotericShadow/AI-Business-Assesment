@@ -77,7 +77,8 @@ export default function LeadCaptureForm({ onComplete }: LeadCaptureFormProps) {
                   type="email"
                   value={email}
                   onChange={(e) => handleEmailChange(e.target.value)}
-                  className="w-full pl-9 sm:pl-10 pr-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base sm:text-lg transition-all duration-200 min-h-touch"
+                  className="w-full pl-9 sm:pl-10 pr-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 min-h-touch"
+                  style={{ fontSize: '16px' }}
                   placeholder="your@email.com"
                   autoFocus
                   autoComplete="email"
@@ -101,7 +102,8 @@ export default function LeadCaptureForm({ onComplete }: LeadCaptureFormProps) {
                   type="text"
                   value={name}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  className="w-full pl-9 sm:pl-10 pr-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base sm:text-lg transition-all duration-200 min-h-touch"
+                  className="w-full pl-9 sm:pl-10 pr-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 min-h-touch"
+                  style={{ fontSize: '16px' }}
                   placeholder="John Smith"
                   autoComplete="name"
                   required
