@@ -1,4 +1,4 @@
-# AI Business Assessment Tool
+# AI Business Assessment Tool - v1.0.1
 
 A Next.js web application that provides personalized AI-powered business assessments for Northern BC businesses. This tool helps business owners discover AI opportunities tailored to their specific industry and needs.
 
