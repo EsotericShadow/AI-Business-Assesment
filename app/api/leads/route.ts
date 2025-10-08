@@ -3,6 +3,17 @@ import { getAllLeads, getLeadByEmail } from '@/lib/database'
 
 export async function GET(request: Request) {
   try {
+    // Security: Only allow access from localhost
+    const host = request.headers.get('host') || ''
+    const isLocal = host.includes('localhost') || host.includes('127.0.0.1')
+    
+    if (!isLocal) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Admin access only available on localhost' },
+        { status: 403 }
+      )
+    }
+
     const { searchParams } = new URL(request.url)
     const email = searchParams.get('email')
     
