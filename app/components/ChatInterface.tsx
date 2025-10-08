@@ -640,7 +640,8 @@ ${ratedProcesses.slice(0, 3).map((p, i) => `${i + 1}. **${p.name}** - ${p.timeSa
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Tell me about your business..."
-              className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+              className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 text-base"
+              style={{ fontSize: '16px' }}
               disabled={isLoading}
               autoComplete="off"
               autoCapitalize="sentences"
