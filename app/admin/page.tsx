@@ -13,6 +13,11 @@ interface Lead {
     name: string
     rating: number
   }>
+  conversationHistory?: Array<{
+    role: 'user' | 'assistant'
+    content: string
+    timestamp: string
+  }>
   reportGenerated: boolean
   consultationRequested: boolean
   implementationRequested: boolean
@@ -84,21 +89,15 @@ export default function AdminDashboard() {
           <p className="text-gray-600">Local Access Only - Lead Management</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <div className="bg-white rounded-lg shadow p-6">
-            <div className="text-gray-600 text-sm font-semibold mb-2">TOTAL LEADS</div>
+            <div className="text-gray-600 text-sm font-semibold mb-2">TOTAL ASSESSMENTS</div>
             <div className="text-4xl font-bold text-blue-600">{leads.length}</div>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
-            <div className="text-gray-600 text-sm font-semibold mb-2">REPORTS SENT</div>
+            <div className="text-gray-600 text-sm font-semibold mb-2">REPORTS EMAILED</div>
             <div className="text-4xl font-bold text-green-600">
               {leads.filter(l => l.reportGenerated).length}
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="text-gray-600 text-sm font-semibold mb-2">CONSULTATIONS</div>
-            <div className="text-4xl font-bold text-purple-600">
-              {leads.filter(l => l.consultationRequested).length}
             </div>
           </div>
         </div>
@@ -152,23 +151,15 @@ export default function AdminDashboard() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex flex-col gap-1">
-                        {lead.reportGenerated && (
-                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            📧 Report Sent
-                          </span>
-                        )}
-                        {lead.consultationRequested && (
-                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            💬 Consultation
-                          </span>
-                        )}
-                        {lead.implementationRequested && (
-                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                            🚀 Implementation
-                          </span>
-                        )}
-                      </div>
+                      {lead.reportGenerated ? (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          📧 Report Sent
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                          ⏳ In Progress
+                        </span>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
                       {new Date(lead.createdAt).toLocaleDateString()}
@@ -215,6 +206,27 @@ export default function AdminDashboard() {
                   <p className="text-gray-700">{selectedLead.businessInfo}</p>
                 </div>
 
+                {selectedLead.conversationHistory && selectedLead.conversationHistory.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">Conversation History</h3>
+                    <div className="bg-gray-50 rounded-lg p-4 max-h-96 overflow-y-auto space-y-3">
+                      {selectedLead.conversationHistory.map((message, idx) => (
+                        <div key={idx} className={`${message.role === 'user' ? 'bg-blue-50 border-l-4 border-blue-500' : 'bg-green-50 border-l-4 border-green-500'} p-3 rounded`}>
+                          <div className="flex justify-between items-start mb-1">
+                            <span className="font-semibold text-sm">
+                              {message.role === 'user' ? '👤 User' : '🤖 AI Assistant'}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              {new Date(message.timestamp).toLocaleTimeString()}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-700 whitespace-pre-wrap">{message.content}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Selected AI Processes</h3>
                   <div className="space-y-3">
@@ -238,19 +250,7 @@ export default function AdminDashboard() {
                       <span className={selectedLead.reportGenerated ? 'text-green-600' : 'text-gray-400'}>
                         {selectedLead.reportGenerated ? '✅' : '⬜'}
                       </span>
-                      <span>Implementation Report Generated</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className={selectedLead.consultationRequested ? 'text-green-600' : 'text-gray-400'}>
-                        {selectedLead.consultationRequested ? '✅' : '⬜'}
-                      </span>
-                      <span>Consultation Requested</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className={selectedLead.implementationRequested ? 'text-green-600' : 'text-gray-400'}>
-                        {selectedLead.implementationRequested ? '✅' : '⬜'}
-                      </span>
-                      <span>Implementation Started</span>
+                      <span>Implementation Report Emailed</span>
                     </div>
                   </div>
                 </div>

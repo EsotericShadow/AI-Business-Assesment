@@ -10,6 +10,11 @@ export interface Lead {
     name: string
     rating: number
   }>
+  conversationHistory?: Array<{
+    role: 'user' | 'assistant'
+    content: string
+    timestamp: string
+  }>
   reportGenerated?: boolean
   consultationRequested?: boolean
   implementationRequested?: boolean
@@ -27,12 +32,19 @@ export async function initializeDatabase() {
         name VARCHAR(255) NOT NULL,
         business_info TEXT NOT NULL,
         selected_processes JSONB NOT NULL,
+        conversation_history JSONB,
         report_generated BOOLEAN DEFAULT FALSE,
         consultation_requested BOOLEAN DEFAULT FALSE,
         implementation_requested BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
+    `
+    
+    // Add conversation_history column if it doesn't exist (for existing databases)
+    await sql`
+      ALTER TABLE leads 
+      ADD COLUMN IF NOT EXISTS conversation_history JSONB
     `
     
     // Create index on email for faster lookups
@@ -56,6 +68,7 @@ export async function storeLead(leadData: Lead): Promise<string> {
         name, 
         business_info, 
         selected_processes,
+        conversation_history,
         report_generated,
         consultation_requested,
         implementation_requested
@@ -64,6 +77,7 @@ export async function storeLead(leadData: Lead): Promise<string> {
         ${leadData.name},
         ${leadData.businessInfo},
         ${JSON.stringify(leadData.selectedProcesses)},
+        ${JSON.stringify(leadData.conversationHistory || [])},
         ${leadData.reportGenerated || false},
         ${leadData.consultationRequested || false},
         ${leadData.implementationRequested || false}
@@ -93,6 +107,7 @@ export async function getAllLeads(): Promise<Lead[]> {
       name: row.name,
       businessInfo: row.business_info,
       selectedProcesses: row.selected_processes,
+      conversationHistory: row.conversation_history || [],
       reportGenerated: row.report_generated,
       consultationRequested: row.consultation_requested,
       implementationRequested: row.implementation_requested,
@@ -126,6 +141,7 @@ export async function getLeadByEmail(email: string): Promise<Lead | null> {
       name: row.name,
       businessInfo: row.business_info,
       selectedProcesses: row.selected_processes,
+      conversationHistory: row.conversation_history || [],
       reportGenerated: row.report_generated,
       consultationRequested: row.consultation_requested,
       implementationRequested: row.implementation_requested,

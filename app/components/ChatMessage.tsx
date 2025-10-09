@@ -37,43 +37,19 @@ export default function ChatMessage({
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
 
-  // Action Buttons Component - Mobile optimized
+  // Action Buttons Component - Simplified to one CTA
   const renderActionButtons = () => {
     return (
       <div className="space-y-2.5 sm:space-y-3">
         <button 
           onClick={onGetReport}
           className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-semibold text-base sm:text-lg hover:from-green-600 hover:to-green-700 active:from-green-700 active:to-green-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center space-x-2 sm:space-x-3 min-h-touch touch-ripple"
-          aria-label="Get detailed implementation report"
+          aria-label="Email me detailed recommendations"
         >
           <span className="text-xl sm:text-2xl flex-shrink-0">📧</span>
           <div className="text-left flex-1 min-w-0">
-            <div className="font-bold text-sm sm:text-base truncate">Get Detailed Report</div>
-            <div className="text-xs sm:text-sm opacity-90 hidden xs:block truncate">Full implementation plan emailed to you</div>
-          </div>
-        </button>
-        
-        <button 
-          onClick={onBookCall}
-          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-semibold text-base sm:text-lg hover:from-blue-600 hover:to-blue-700 active:from-blue-700 active:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center space-x-2 sm:space-x-3 min-h-touch touch-ripple"
-          aria-label="Book strategy consultation call"
-        >
-          <span className="text-xl sm:text-2xl flex-shrink-0">💬</span>
-          <div className="text-left flex-1 min-w-0">
-            <div className="font-bold text-sm sm:text-base truncate">Book Strategy Call</div>
-            <div className="text-xs sm:text-sm opacity-90 hidden xs:block truncate">30-min consultation with our AI experts</div>
-          </div>
-        </button>
-        
-        <button 
-          onClick={onStartImplementation}
-          className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-semibold text-base sm:text-lg hover:from-purple-600 hover:to-purple-700 active:from-purple-700 active:to-purple-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center space-x-2 sm:space-x-3 min-h-touch touch-ripple"
-          aria-label="Start AI implementation project"
-        >
-          <span className="text-xl sm:text-2xl flex-shrink-0">🚀</span>
-          <div className="text-left flex-1 min-w-0">
-            <div className="font-bold text-sm sm:text-base truncate">Start Implementation</div>
-            <div className="text-xs sm:text-sm opacity-90 hidden xs:block truncate">We'll help you set up your first AI solution</div>
+            <div className="font-bold text-sm sm:text-base truncate">Email Me This Report</div>
+            <div className="text-xs sm:text-sm opacity-90 hidden xs:block truncate">Get your personalized AI implementation plan</div>
           </div>
         </button>
       </div>

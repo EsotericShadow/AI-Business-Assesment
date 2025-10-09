@@ -401,25 +401,15 @@ ${ratedProcesses.slice(0, 3).map((p, i) => `${i + 1}. **${p.name}** - ${p.timeSa
     }
     setMessages(prev => [...prev, resultsMessage])
 
-    // Add compelling call-to-action
+    // Add simple CTA - just email report option
     const ctaMessage: Message = {
       id: (Date.now() + 1).toString(),
       role: 'assistant',
-      content: "**Ready to get started?** Choose your next step:",
-      timestamp: new Date(),
-      type: 'cta-buttons'
-    }
-    setMessages(prev => [...prev, ctaMessage])
-
-    // Add action buttons
-    const actionMessage: Message = {
-      id: (Date.now() + 2).toString(),
-      role: 'assistant',
-      content: "📧 **Get Detailed Report** - Full implementation plan emailed to you\n💬 **Book Strategy Call** - 30-min consultation with our AI experts\n🚀 **Start Implementation** - We'll help you set up your first AI solution",
+      content: "That's your AI assessment complete! 🎉\n\nWould you like me to **email you a detailed implementation plan** based on these recommendations?\n\nIf you'd like help implementing any of these, feel free to reach out: **gabriel@evergreenwebsolutions.ca**",
       timestamp: new Date(),
       type: 'action-buttons'
     }
-    setMessages(prev => [...prev, actionMessage])
+    setMessages(prev => [...prev, ctaMessage])
   }
 
   const selectedCount = selectedProcesses.filter(p => p.isSelected).length
@@ -439,7 +429,14 @@ ${ratedProcesses.slice(0, 3).map((p, i) => `${i + 1}. **${p.name}** - ${p.timeSa
           email: userEmail,
           name: userName,
           selectedProcesses: selectedProcesses.filter(p => p.isSelected && p.userRating),
-          businessInfo
+          businessInfo,
+          conversationHistory: messages
+            .filter(m => m.type === 'text' || !m.type)
+            .map(m => ({
+              role: m.role,
+              content: m.content,
+              timestamp: m.timestamp.toISOString()
+            }))
         }),
       })
 

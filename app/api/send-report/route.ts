@@ -5,7 +5,7 @@ import { sendImplementationReport } from '@/lib/email-service'
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, name, selectedProcesses, businessInfo } = await request.json()
+    const { email, name, selectedProcesses, businessInfo, conversationHistory } = await request.json()
 
     if (!email || !name || !selectedProcesses) {
       return NextResponse.json(
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       name
     )
 
-    // Store lead in database for follow-up
+    // Store lead in database for follow-up with conversation history
     const leadId = await storeLead({
       email,
       name,
@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
         name: p.name,
         rating: p.userRating
       })),
+      conversationHistory: conversationHistory || [],
       reportGenerated: true,
       timestamp: new Date()
     })
