@@ -5,7 +5,6 @@ import { Send, Loader2 } from 'lucide-react'
 import ChatMessage, { LoadingMessage } from './ChatMessage'
 import ProgressBar from './ProgressBar'
 import { BusinessProcess, ProcessDiscoveryAI } from '@/lib/process-discovery'
-import { XAIClient } from '@/lib/xai-client'
 
 interface Message {
   id: string
@@ -187,14 +186,29 @@ export default function ChatInterface({ userEmail, userName, onExit }: ChatInter
         
         // Generate AI rationales for each process
         try {
-          const xaiClient = new XAIClient(process.env.XAI_API_KEY || 'test-key-replace-with-real-key')
           const conversationHistory = messages.map(m => `${m.role}: ${m.content}`).join('\n')
-          const rationales = await xaiClient.generateProcessRationales(
-            processes,
-            businessInfo + ' ' + input.trim(),
-            conversationHistory,
-            userEmail
-          )
+          const rationaleResponse = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'process-rationales',
+              processIds: processes.map(process => process.id),
+              businessInfo: businessInfo + ' ' + input.trim(),
+              conversationHistory,
+              userId: userEmail
+            })
+          })
+          if (!rationaleResponse.ok) {
+            throw new Error('Unable to generate process rationales')
+          }
+          const rationaleData = await rationaleResponse.json()
+          const rationales = new Map<string, string>()
+          processes.forEach(process => {
+            const rationale = rationaleData.rationales?.[process.id]
+            if (typeof rationale === 'string') {
+              rationales.set(process.id, rationale)
+            }
+          })
           
           // Attach rationales to processes
           const processesWithRationales = processes.map(process => ({

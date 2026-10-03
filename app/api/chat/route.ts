@@ -1,13 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { XAIClient } from '@/lib/xai-client'
+import { ProcessDiscoveryAI } from '@/lib/process-discovery'
 import { assessmentRateLimit } from '@/lib/rate-limiter'
 import { knowledgeBase } from '@/lib/knowledge-base'
 
 export async function POST(request: NextRequest) {
   try {
-    const { message, context, userId, phase, businessInfo, discoveredOpportunities, questionCount } = await request.json()
+    const { action, message, context, userId, phase, businessInfo, discoveredOpportunities, questionCount, processIds, conversationHistory } = await request.json()
+    const isRationaleRequest = action === 'process-rationales'
 
-    if (!message) {
+    if (isRationaleRequest && (
+      typeof businessInfo !== 'string' || businessInfo.length > 20000 ||
+      typeof conversationHistory !== 'string' || conversationHistory.length > 40000 ||
+      !Array.isArray(processIds) || processIds.length === 0 || processIds.length > 50 ||
+      !processIds.every((id: unknown) => typeof id === 'string' && id.length <= 100) ||
+      (userId !== undefined && (typeof userId !== 'string' || userId.length > 320))
+    )) {
+      return NextResponse.json({ error: 'Invalid process rationale request' }, { status: 400 })
+    }
+
+    if (!isRationaleRequest && !message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 })
     }
 
@@ -23,7 +35,32 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const xaiClient = new XAIClient(process.env.XAI_API_KEY!)
+    const apiKey = process.env.XAI_API_KEY
+    if (!apiKey) {
+      return NextResponse.json({ error: 'AI service is not configured' }, { status: 503 })
+    }
+    const xaiClient = new XAIClient(apiKey)
+
+    if (isRationaleRequest) {
+      // Derive process details on the server rather than trusting client-supplied prompts.
+      const availableProcesses = await new ProcessDiscoveryAI().discoverProcesses(businessInfo)
+      const requestedIds = new Set<string>(processIds)
+      const processes = availableProcesses.filter(process => requestedIds.has(process.id))
+      if (processes.length === 0) {
+        return NextResponse.json({ error: 'No matching processes found' }, { status: 400 })
+      }
+      const allowedIds = new Set(processes.map(process => process.id))
+      const generatedRationales = await xaiClient.generateProcessRationales(
+        processes, businessInfo, conversationHistory, userId
+      )
+      const rationales: Record<string, string> = Object.create(null)
+      generatedRationales.forEach((value, id) => {
+        if (allowedIds.has(id) && typeof value === 'string') {
+          rationales[id] = value
+        }
+      })
+      return NextResponse.json({ rationales })
+    }
     
     // Load relevant knowledge context
     let knowledgeContext = ''
@@ -35,7 +72,7 @@ export async function POST(request: NextRequest) {
           phase
         )
       } catch (error) {
-        console.error('Error loading knowledge context:', error)
+        console.error('Error loading knowledge context')
         // Continue without context if there's an error
       }
     }
@@ -64,12 +101,12 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Chat API error:', error)
+    console.error('Chat API request failed')
     
     if (error instanceof Error) {
       if (error.message.includes('rate limit')) {
         return NextResponse.json(
-          { error: error.message },
+          { error: 'AI service rate limit exceeded. Please try again shortly.' },
           { status: 429 }
         )
       }

@@ -4,7 +4,9 @@ const { sql } = require('@vercel/postgres');
 async function testNewDatabase() {
   try {
     // Set the connection string for this test
-    process.env.POSTGRES_URL = 'postgresql://neondb_owner:REDACTED_CREDENTIAL@ep-withered-lake-ad378t9o-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require';
+    if (!process.env.POSTGRES_URL) {
+      throw new Error('Set POSTGRES_URL securely before running this script.');
+    }
     
     console.log('🔄 Testing NEW AI Assessment database connection...');
     
@@ -35,7 +37,8 @@ async function testNewDatabase() {
     
   } catch (error) {
     console.error('❌ Database test failed:');
-    console.error(error);
+    console.error('Database operation failed; connection credentials are not logged.');
+    process.exitCode = 1;
   }
 }
 
